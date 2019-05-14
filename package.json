@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "buid": "tsc",
-    "test": "mocha -r ts-node/register src/**/*.spec.ts"
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "dev": "mocha -r ts-node/register src/**/*.spec.ts --watch --watch-extensions ts"
   },
   "repository": {
     "type": "git",

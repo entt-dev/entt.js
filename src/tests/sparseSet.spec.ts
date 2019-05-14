@@ -59,4 +59,123 @@ describe('sparseSet', () => {
 		})
 	})
 
+	describe('#respect(set)', () => {
+		it('should respect disjoint', () => {
+			const a = new SparseSet()
+			const b = new SparseSet()
+
+			a.construct(3)
+			a.construct(12)
+			a.construct(42)
+
+			expect(a.get(3)).eq(0)
+			expect(a.get(12)).eq(1)
+			expect(a.get(42)).eq(2)
+
+			a.respect(b)
+
+			expect(a.get(3)).eq(0)
+			expect(a.get(12)).eq(1)
+			expect(a.get(42)).eq(2)
+		})
+		it('should respect overlap', () => {
+			const a = new SparseSet()
+			const b = new SparseSet()
+
+			a.construct(3)
+			a.construct(12)
+			a.construct(42)
+
+			b.construct(12)
+
+			expect(a.get(3)).eq(0)
+			expect(a.get(12)).eq(1)
+			expect(a.get(42)).eq(2)
+
+			a.respect(b)
+
+			expect(a.get(3)).eq(0)
+			expect(a.get(42)).eq(1)
+			expect(a.get(12)).eq(2)
+		})
+		it('should respect ordered', () => {
+			const a = new SparseSet()
+			const b = new SparseSet()
+
+			a.construct(1)
+			a.construct(2)
+			a.construct(3)
+			a.construct(4)
+			a.construct(5)
+
+			b.construct(6)
+			b.construct(1)
+			b.construct(2)
+			b.construct(3)
+			b.construct(4)
+			b.construct(5)
+
+			b.respect(a)
+
+			expect(b.get(6)).eq(0)
+			expect(b.get(1)).eq(1)
+			expect(b.get(2)).eq(2)
+			expect(b.get(3)).eq(3)
+			expect(b.get(4)).eq(4)
+			expect(b.get(5)).eq(5)
+		})
+		it('should respect reverse', () => {
+			const a = new SparseSet()
+			const b = new SparseSet()
+
+			a.construct(1)
+			a.construct(2)
+			a.construct(3)
+			a.construct(4)
+			a.construct(5)
+
+			b.construct(5)
+			b.construct(4)
+			b.construct(3)
+			b.construct(2)
+			b.construct(1)
+			b.construct(6)
+
+			b.respect(a)
+
+			expect(b.get(6)).eq(0)
+			expect(b.get(1)).eq(1)
+			expect(b.get(2)).eq(2)
+			expect(b.get(3)).eq(3)
+			expect(b.get(4)).eq(4)
+			expect(b.get(5)).eq(5)
+		})
+		it('should respect unordered', () => {
+			const a = new SparseSet()
+			const b = new SparseSet()
+
+			a.construct(1)
+			a.construct(2)
+			a.construct(3)
+			a.construct(4)
+			a.construct(5)
+
+			b.construct(3)
+			b.construct(2)
+			b.construct(6)
+			b.construct(1)
+			b.construct(4)
+			b.construct(5)
+
+			b.respect(a)
+
+			expect(b.get(6)).eq(0)
+			expect(b.get(1)).eq(1)
+			expect(b.get(2)).eq(2)
+			expect(b.get(3)).eq(3)
+			expect(b.get(4)).eq(4)
+			expect(b.get(5)).eq(5)
+		})
+	})
+
 })

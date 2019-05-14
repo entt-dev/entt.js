@@ -40,12 +40,13 @@ export default class SparseSet {
 	}
 
 	public destroy(entity: number): void {
-		assert(this.has(entity), 'Entity to delete is missing')
-		const candidate = this.reverse[entity]
-		this.direct[candidate] = this.direct[this.direct.length - 1]
-		this.reverse[this.direct[this.direct.length - 1]] = candidate
-		this.direct.pop()
-		delete this.reverse[entity]
+		if (this.has(entity)) {
+			const candidate = this.reverse[entity]
+			this.direct[candidate] = this.direct[this.direct.length - 1]
+			this.reverse[this.direct[this.direct.length - 1]] = candidate
+			this.direct.pop()
+			delete this.reverse[entity]
+		}
 	}
 
 	public get(entity: number) {
@@ -62,5 +63,20 @@ export default class SparseSet {
 
 	public get data() {
 		return this.direct
+	}
+
+	public respect(other: SparseSet) {
+		let pos = this.size
+		let otherPos = other.size
+
+		while (pos && otherPos) {
+			if (this.has(other.data[otherPos - 1])) {
+				if (other.data[otherPos - 1] !== this.direct[pos - 1]) {
+					this.swap(pos - 1, this.get(other.data[otherPos - 1]))
+				}
+				pos -= 1
+			}
+			otherPos -= 1
+		}
 	}
 }
